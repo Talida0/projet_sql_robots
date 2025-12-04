@@ -1,3 +1,5 @@
+CREATE DATABASE gestion_robots; 
+
 USE gestion_robots;
 
 CREATE TABLE robots (
@@ -30,7 +32,6 @@ CREATE TABLE actions (
     resultat VARCHAR(20) CHECK (resultat IN ('réussi', 'échoué', 'partiel')),
     impact VARCHAR(20) CHECK (impact IN ('positif', 'négatif', 'neutre')),
     duree_intervention INT,
-    resultat VARCHAR(20),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
     FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
