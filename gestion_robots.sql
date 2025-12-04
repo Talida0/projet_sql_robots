@@ -36,3 +36,70 @@ CREATE TABLE actions (
     FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
     FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
 );
+
+CREATE TABLE lois_robotique (
+    id_loi INT PRIMARY KEY,
+    nom_loi VARCHAR(50),
+    description TEXT
+);
+
+CREATE TABLE violations_lois (
+    id_violation INT PRIMARY KEY,
+    id_robot INT,
+    id_action INT,
+    id_loi INT,
+    gravite VARCHAR(20),   
+    description TEXT,
+    timestamp TIMESTAMP,
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
+    FOREIGN KEY (id_action) REFERENCES actions(id_action),
+    FOREIGN KEY (id_loi) REFERENCES lois_robotique(id_loi)
+);
+
+
+CREATE TABLE performances_robots (
+    id_performance INT PRIMARY KEY,
+    id_robot INT,
+    nb_scenarios_resolus INT,
+    taux_reussite DECIMAL(5,2),
+    violations INT,
+    note_globale DECIMAL(5,2), 
+    periode VARCHAR(20),      
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
+);
+
+
+CREATE TABLE etats_systeme (
+    id_etat INT PRIMARY KEY,
+    id_robot INT,
+    type_etat VARCHAR(50),  
+    gravite VARCHAR(20),    
+    timestamp TIMESTAMP,
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
+);
+
+
+CREATE TABLE temps_intervention (
+    id_temps INT PRIMARY KEY,
+    id_action INT,
+    id_robot INT,
+    id_scenario INT,
+    duree_intervention INT,  
+    FOREIGN KEY (id_action) REFERENCES actions(id_action),
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
+    FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
+);
+
+
+CREATE TABLE evaluations_humaines (
+    id_evaluation INT PRIMARY KEY,
+    id_robot INT,
+    id_humain INT,
+    id_scenario INT,
+    note INT,                
+    commentaire TEXT,
+    timestamp TIMESTAMP,
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
+    FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
+    FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
+);
