@@ -10,6 +10,7 @@ CREATE TABLE robots (
 CREATE TABLE humains (
     id_humain INT PRIMARY KEY,
     nom VARCHAR(50),
+    prenom VARCHAR(50),
     vulnerabilite VARCHAR(20) CHECK (vulnerabilite IN ('élevée', 'moyenne', 'faible')),
     localisation VARCHAR(50)
 );
@@ -26,8 +27,11 @@ CREATE TABLE actions (
     id_humain INT,
     id_scenario INT,
     action TEXT,
+    resultat VARCHAR(20) CHECK (resultat IN ('réussi', 'échoué', 'partiel')),
+    impact VARCHAR(20) CHECK (impact IN ('positif', 'négatif', 'neutre')),
+    duree_intervention INT,
     resultat VARCHAR(20),
-    timestamp TIMESTAMP,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
     FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
     FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
