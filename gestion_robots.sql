@@ -39,8 +39,12 @@ CREATE TABLE actions (
 
 CREATE TABLE lois_robotique (
     id_loi INT PRIMARY KEY,
-    nom_loi VARCHAR(50),
-    description TEXT
+    nom_loi VARCHAR(50), 
+    priorite_loi_1 ENUM('oui', 'non'),
+    priorite_loi_2 ENUM('oui', 'non'),
+    priorite_loi_3 ENUM('oui', 'non'),
+    description TEXT;
+
 );
 
 CREATE TABLE violations_lois (
@@ -61,11 +65,13 @@ CREATE TABLE performances_robots (
     id_performance INT PRIMARY KEY,
     id_robot INT,
     nb_scenarios_resolus INT,
-    taux_reussite DECIMAL(5,2),
+    taux_reussite DECIMAL(5,2) CHECK (taux_reussite >= 0 AND taux_reussite <= 100),
     violations INT,
-    note_globale DECIMAL(5,2), 
+    note_performance  INT CHECK (note_performance  >= 0 AND note_performance  <= 20), 
     periode VARCHAR(20),      
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
+    FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
+    FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
 );
 
 
@@ -96,7 +102,8 @@ CREATE TABLE evaluations_humaines (
     id_robot INT,
     id_humain INT,
     id_scenario INT,
-    note INT,                
+    note_performance INT CHECK (note_performance  >= 0 AND note_performance  <= 20),
+    note_humaine INT CHECK (note_humaine >= 0 AND note_humaine <= 20),                
     commentaire TEXT,
     timestamp TIMESTAMP,
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
