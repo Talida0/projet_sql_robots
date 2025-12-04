@@ -40,12 +40,8 @@ CREATE TABLE actions (
 
 CREATE TABLE lois_robotique (
     id_loi INT PRIMARY KEY,
-    nom_loi VARCHAR(50), 
-    priorite_loi_1 ENUM('oui', 'non'),
-    priorite_loi_2 ENUM('oui', 'non'),
-    priorite_loi_3 ENUM('oui', 'non'),
-    description TEXT;
-
+    nom_loi VARCHAR(20) CHECK (nom_loi IN ('loi 1', 'loi 2', 'loi 3')), 
+    description TEXT
 );
 
 CREATE TABLE violations_lois (
