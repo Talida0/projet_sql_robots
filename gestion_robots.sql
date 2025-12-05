@@ -57,7 +57,6 @@ CREATE TABLE violations_lois (
     FOREIGN KEY (id_loi) REFERENCES lois_robotique(id_loi)
 );
 
-
 CREATE TABLE performances_robots (
     id_performance INT PRIMARY KEY,
     id_robot INT,
@@ -65,11 +64,10 @@ CREATE TABLE performances_robots (
     taux_reussite DECIMAL(5,2) CHECK (taux_reussite >= 0 AND taux_reussite <= 100),
     violations INT,
     note_performance  INT CHECK (note_performance  >= 0 AND note_performance  <= 20), 
-    periode VARCHAR(20),      
+    periode VARCHAR(20),
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
-    FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
-    FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
 );
+
 
 
 CREATE TABLE etats_systeme (
