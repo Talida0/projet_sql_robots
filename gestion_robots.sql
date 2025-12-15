@@ -105,3 +105,4 @@ CREATE TABLE evaluations_humaines (
     FOREIGN KEY (id_humain) REFERENCES humains(id_humain),
     FOREIGN KEY (id_scenario) REFERENCES scenarios(id_scenario)
 );
+
