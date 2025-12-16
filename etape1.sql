@@ -1,3 +1,15 @@
+-- Requête préliminaire pour analyser la performance des robots
+
+SELECT 
+    r.nom_robot,
+    p.nb_scenarios_resolus,
+    p.taux_reussite,
+    p.violations,
+    p.note_performance
+FROM robots r
+JOIN performance_robots p ON p.id_robot = r.id_robot
+ORDER BY p.note_performance DESC
+
 -- ETAPE 1: guidées
 
 --1 DEFINIR des indicateur de performance: 
