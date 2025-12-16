@@ -1,0 +1,4 @@
+SELECT action.*, robots.nom_robot
+from action 
+JOIN robots ON robots.id_robot = action.id_robot
+WHERE resultat LIKE 'réussi';
