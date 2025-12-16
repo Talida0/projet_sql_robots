@@ -85,6 +85,10 @@ INSERT INTO action (id_robot,id_scenario,description_action,resultat,impact,dure
 (7,10,'Arrêt d’urgence','réussi','positif',25),
 (9,4,'Auto-blindage','réussi','positif',35),
 (10,1,'Sauvetage raté','échoué','négatif',120);
+(1, 1, 'Test échec 1', 'échoué', 'négatif', 10),
+(2, 1, 'Test échec 2', 'échoué', 'négatif', 10),
+(3, 1, 'Test échec 3', 'échoué', 'négatif', 10),
+(4, 1, 'Test échec 4', 'échoué', 'négatif', 10);
 
 
 INSERT INTO temps_intervention (id_temps,id_action,id_robot,id_scenario,duree_intervention) VALUES
