@@ -21,6 +21,7 @@ CREATE TABLE scenarios (
     id_scenario INT PRIMARY KEY,
     description TEXT,
     priorite_loi INT CHECK (priorite_loi IN (1,2,3))
+    suivi_scenario
 );
 
 CREATE TABLE actions (
