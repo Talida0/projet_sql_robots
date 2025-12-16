@@ -10,7 +10,6 @@ CREATE TABLE robots (
     date_activation DATE
 );
 
-
 CREATE TABLE ressource (
     id_ressource INT AUTO_INCREMENT PRIMARY KEY,
     id_robot INT NOT NULL,
@@ -22,15 +21,23 @@ CREATE TABLE ressource (
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
 );
 
+CREATE TABLE scenario (
+    id_scenario INT AUTO_INCREMENT PRIMARY KEY,
+    description TEXT,
+    priorite_loi INT CHECK (priorite_loi IN (1,2,3)),
+    date_creation DATETIME NOT NULL
+);
 
 CREATE TABLE action (
     id_action INT AUTO_INCREMENT PRIMARY KEY,
     id_robot INT,
+    id_scenario INT, 
     description_action TEXT,
     resultat ENUM('réussi', 'échoué'),
     impact ENUM('positif', 'négatif'),
     duree_intervention INT,
-    FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
+    FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
+    FOREIGN KEY (id_scenario) REFERENCES scenario(id_scenario)
 );
 
 CREATE TABLE maintenance (
@@ -44,17 +51,6 @@ CREATE TABLE maintenance (
     FOREIGN KEY (id_ressource) REFERENCES ressource(id_ressource)
 );
 
-
-CREATE TABLE scenario (
-    id_scenario INT AUTO_INCREMENT PRIMARY KEY,
-    description TEXT,
-    priorite_loi INT CHECK (priorite_loi IN (1,2,3)),
-    date_creation DATETIME NOT NULL
-);
-
-
-
-
 CREATE TABLE humain (
     id_humain INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100),
@@ -62,8 +58,6 @@ CREATE TABLE humain (
     vulnerabilite ENUM('faible', 'moyenne', 'elevee'),
     localisation VARCHAR(100)
 );
-
-
 
 CREATE TABLE performance_robots (
     id_performance INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,7 +101,7 @@ CREATE TABLE evaluations_humaines (
     note_humaine TEXT,
     date_evaluation DATE NOT NULL,
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
-    FOREIGN KEY (id_humain) REFERENCES humains(id_humain)
+    FOREIGN KEY (id_humain) REFERENCES humain(id_humain)
 );
 
 

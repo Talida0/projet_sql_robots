@@ -17,23 +17,12 @@ SELECT
         ) AS taux_reussite,
     SUM(CASE WHEN lp.priorite_loi_1='Oui' THEN 1 ELSE 0 END) AS nb_actions_priorite_loi_1,
     SUM(CASE WHEN lp.priorite_loi_2='Oui' THEN 1 ELSE 0 END) AS nb_actions_priorite_loi_2,
-    SUM(CASE WHEN lp.priorite_loi_3='Oui' THEN 1 ELSE 0 END) AS nb_actions_priorite_loi_3,
-    ROUND(AVG(a.duree_intervention), 2) AS duree_moyenne_interventions,
-    MIN(a.duree_intervention) AS duree_min,
-    MAX(a.duree_intervention) AS duree_max,
-    SUM(a.duree_intervention) AS duree_totale_interventions,
-    CASE 
-        WHEN ROUND(AVG(a.duree_intervention), 2) <= 20 THEN 'Rapide'
-        WHEN ROUND(AVG(a.duree_intervention), 2) <= 40 THEN 'Normal'
-        ELSE 'Lent'
-    END AS vitesse_intervention
+    SUM(CASE WHEN lp.priorite_loi_3='Oui' THEN 1 ELSE 0 END) AS nb_actions_priorite_loi_3
 FROM robots r
 JOIN action a ON a.id_robot = r.id_robot
 LEFT JOIN lois_priorisees lp ON a.id_scenario = lp.id_scenario
 GROUP BY r.id_robot, r.nom_robot
 ORDER BY r.id_robot;
-
-
 
     --INDEX
 CREATE INDEX action_id_robot ON action(id_robot);

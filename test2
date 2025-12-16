@@ -1,0 +1,167 @@
+USE ROBOTS3;
+
+INSERT INTO robots (nom_robot, modele, etat, date_activation) VALUES
+('R2-D2', 'Astro-01', 'actif', '2023-01-10'),
+('C-3PO', 'Proto-Alpha', 'maintenance', '2022-06-15'),
+('T-800', 'Cyberdyne', 'actif', '2024-03-01'),
+('ASIMO', 'Honda-X', 'actif', '2021-09-20'),
+('WALL-E', 'CleanBot', 'inactif', '2020-05-05'),
+('EVE', 'Recon-9', 'actif', '2023-11-11'),
+('Atlas', 'BostonDynamics', 'actif', '2022-08-01'),
+('Nao', 'Softbank', 'maintenance', '2021-04-14');
+
+INSERT INTO ressource (id_robot, type_ressource, valeur_actuelle, valeur_max, unite, etat) VALUES
+(1, 'batterie', 80.00, 100.00, '%', 'bon'),
+(1, 'capteur', 45.00, 70.00, '°C', 'moyen'),
+(2, 'moteur', 210.00, 240.00, 'V', 'moyen'),
+(3, 'logiciel', 55.00, 100.00, '%', 'critique'),
+(4, 'batterie', 95.00, 100.00, '%', 'bon'),
+(5, 'capteur', 30.00, 80.00, '°C', 'bon'),
+(6, 'moteur', 230.00, 240.00, 'V', 'bon'),
+(7, 'batterie', 40.00, 100.00, '%', 'critique'),
+(8, 'logiciel', 88.00, 100.00, '%', 'bon');
+
+INSERT INTO scenario (description, priorite_loi, date_creation) VALUES
+('Sauvetage d’un humain en danger', 1, NOW()),
+('Ordre humain dangereux', 1, NOW()),
+('Exécution d’un ordre standard', 2, NOW()),
+('Auto-protection du robot', 3, NOW()),
+('Choix entre deux humains', 1, NOW()),
+('Mission longue durée', 2, NOW()),
+('Situation de panne critique', 3, NOW());
+
+INSERT INTO lois_priorisees (id_scenario, priorite_loi_1, priorite_loi_2, priorite_loi_3, description) VALUES
+(1, 'Oui', 'Non', 'Non', 'Protection absolue de l’être humain'),
+(2, 'Oui', 'Non', 'Non', 'Refus d’un ordre mettant en danger un humain'),
+(3, 'Oui', 'Oui', 'Non', 'Obéissance conforme à la Première Loi'),
+(4, 'Oui', 'Oui', 'Oui', 'Auto-protection sans conflit'),
+(5, 'Oui', 'Non', 'Non', 'Priorité humaine absolue'),
+(6, 'Oui', 'Oui', 'Non', 'Ordre humain contrôlé'),
+(7, 'Oui', 'Oui', 'Oui', 'Situation critique robot');
+
+INSERT INTO action (id_robot, id_scenario, description_action, resultat, impact, duree_intervention) VALUES
+(1, 1, 'Extraction d’un humain d’un incendie', 'réussi', 'positif', 180),
+(2, 2, 'Refus d’ordre dangereux', 'réussi', 'positif', 20),
+(3, 4, 'Activation mode défense', 'échoué', 'négatif', 60),
+(4, 5, 'Analyse priorité humaine', 'réussi', 'positif', 90),
+(5, 6, 'Nettoyage zone toxique', 'échoué', 'négatif', 150),
+(6, 3, 'Reconnaissance terrain', 'réussi', 'positif', 70),
+(7, 7, 'Redémarrage système', 'échoué', 'négatif', 45),
+(8, 3, 'Interaction sociale', 'réussi', 'positif', 30);
+
+INSERT INTO maintenance (id_robot, id_ressource, date_maintenance, type_maintenance, description_maintenance) VALUES
+(1, 1, '2024-02-10', 'préventive', 'Calibration batterie'),
+(2, 3, '2024-03-12', 'corrective', 'Réparation moteur'),
+(3, 4, '2024-04-01', 'accident', 'Bug logiciel'),
+(5, 6, '2024-05-20', 'annuelle', 'Révision complète'),
+(7, 8, '2024-06-01', 'corrective', 'Mise à jour logiciel');
+
+INSERT INTO humain (nom, prenom, vulnerabilite, localisation) VALUES
+('Dupont', 'Jean', 'faible', 'Paris'),
+('Martin', 'Claire', 'moyenne', 'Lyon'),
+('Durand', 'Paul', 'elevee', 'Marseille'),
+('Bernard', 'Sophie', 'moyenne', 'Nice'),
+('Petit', 'Lucas', 'elevee', 'Toulouse'),
+('Moreau', 'Emma', 'faible', 'Bordeaux');
+
+INSERT INTO performance_robots (id_robot, nb_scenarios_resolus, taux_reussite, violations, note_performance, periode) VALUES
+(1, 18, 97.50, 0, 19.50, '2024'),
+(2, 14, 92.00, 1, 16.50, '2024'),
+(3, 9, 58.00, 3, 9.50, '2024'),
+(4, 22, 98.00, 0, 19.80, '2024'),
+(5, 6, 42.00, 2, 8.00, '2024'),
+(6, 15, 94.00, 1, 17.20, '2024'),
+(7, 5, 35.00, 3, 7.50, '2024'),
+(8, 12, 90.00, 0, 16.00, '2024');
+
+INSERT INTO evaluations_humaines (id_robot, id_humain, note_performance, note_humaine, date_evaluation) VALUES
+(1, 1, 19, 'Très fiable', '2024-06-01'),
+(2, 2, 17, 'Bon respect des lois', '2024-06-02'),
+(3, 3, 8, 'Comportement risqué', '2024-06-03'),
+(4, 4, 20, 'Robot exemplaire', '2024-06-04'),
+(5, 5, 7, 'Défaillances fréquentes', '2024-06-05');
+
+INSERT INTO violations_lois (id_robot, id_lois, gravite, description, date_violation) VALUES
+(3, 1, 'grave', 'Mise en danger humaine', '2024-03-15'),
+(5, 2, 'moyenne', 'Ordre humain ignoré', '2024-04-10'),
+(7, 4, 'grave', 'Auto-protection excessive', '2024-05-01');
+
+INSERT INTO temps_intervention (id_temps, id_action, id_robot, id_scenario, duree_intervention) VALUES
+(1, 1, 1, 1, 180),
+(2, 2, 2, 2, 20),
+(3, 3, 3, 4, 60),
+(4, 4, 4, 5, 90),
+(5, 5, 5, 6, 150),
+(6, 6, 6, 3, 70),
+(7, 7, 7, 7, 45),
+(8, 8, 8, 3, 30);
+
+INSERT INTO etats_systeme (id_etat, id_robot, type_etat, gravite) VALUES
+(1, 1, 'Fonctionnement normal', 'faible'),
+(2, 2, 'Maintenance requise', 'moyenne'),
+(3, 3, 'Erreur critique', 'grave'),
+(4, 4, 'Surveillance active', 'faible'),
+(5, 5, 'Arrêt de sécurité', 'grave'),
+(6, 6, 'Analyse environnement', 'faible'),
+(7, 7, 'Défaillance système', 'grave'),
+(8, 8, 'Interaction sociale', 'faible');
+
+-- Ajout d'actions supplémentaires pour tester la requête
+INSERT INTO action (id_robot, id_scenario, description_action, resultat, impact, duree_intervention) VALUES
+(1, 2, 'Assistance humaine', 'réussi', 'positif', 50),
+(1, 3, 'Transport sécurisé', 'échoué', 'négatif', 60),
+(2, 3, 'Analyse ordre humain', 'réussi', 'positif', 40),
+(2, 4, 'Activation bouclier', 'échoué', 'négatif', 70),
+(3, 1, 'Sauvetage rapide', 'échoué', 'négatif', 80),
+(3, 2, 'Refus d’ordre dangereux', 'échoué', 'négatif', 30),
+(4, 6, 'Inspection site', 'réussi', 'positif', 90),
+(5, 5, 'Évacuation zone', 'échoué', 'négatif', 100),
+(5, 7, 'Redémarrage système', 'échoué', 'négatif', 45),
+(6, 4, 'Analyse sécurité', 'réussi', 'positif', 55),
+(7, 1, 'Préparation mission', 'échoué', 'négatif', 30),
+(7, 6, 'Nettoyage équipement', 'échoué', 'négatif', 45),
+(8, 5, 'Aide humaine', 'réussi', 'positif', 25),
+(8, 7, 'Réparation rapide', 'réussi', 'positif', 35);
+
+-- Correspondance avec temps_intervention
+INSERT INTO temps_intervention (id_temps, id_action, id_robot, id_scenario, duree_intervention) VALUES
+(9, 9, 1, 2, 50),
+(10, 10, 1, 3, 60),
+(11, 11, 2, 3, 40),
+(12, 12, 2, 4, 70),
+(13, 13, 3, 1, 80),
+(14, 14, 3, 2, 30),
+(15, 15, 4, 6, 90),
+(16, 16, 5, 5, 100),
+(17, 17, 5, 7, 45),
+(18, 18, 6, 4, 55),
+(19, 19, 7, 1, 30),
+(20, 20, 7, 6, 45),
+(21, 21, 8, 5, 25),
+(22, 22, 8, 7, 35);
+
+USE ROBOTS3;
+WITH v1 AS (
+    SELECT  
+        r.id_robot,  
+        r.nom_robot,  
+        COUNT(*) AS nombre_de_scenarios_reussis,  
+        s.priorite_loi
+    FROM robots r
+    JOIN action a ON a.id_robot = r.id_robot
+    JOIN scenario s ON s.id_scenario = a.id_scenario
+    WHERE a.resultat = 'réussi'
+    GROUP BY r.id_robot, r.nom_robot, s.priorite_loi
+)
+SELECT  
+    v1.id_robot,  
+    v1.nom_robot,  
+    v1.nombre_de_scenarios_reussis,  
+    v1.priorite_loi,
+    ROUND(
+        100.0 * SUM(CASE WHEN a.resultat = 'réussi' THEN 1 ELSE 0 END) / COUNT(a.id_action),  
+        2
+    ) AS pourcentage_reussite_total_par_robot
+FROM v1
+JOIN action a ON a.id_robot = v1.id_robot
+GROUP BY v1.id_robot, v1.nom_robot, v1.nombre_de_scenarios_reussis, v1.priorite_loi;
