@@ -1,27 +1,3 @@
-SELECT action.*, robots.nom_robot
-from action 
-JOIN robots ON robots.id_robot = action.id_robot
-WHERE resultat LIKE 'réussi';
-
- SELECT DISTINCT
-        action.id_robot,
-        ti.id_scenario
-    FROM action 
-    JOIN temps_intervention ti ON ti.id_action = action.id_action
-    WHERE action.resultat = 'réussi'
-
-    SELECT DISTINCT robots.id_robot,
-	   robots.nom_robot,
-       l.priorite_loi_1,
-	   l.priorite_loi_2,
-		l.priorite_loi_3
-from action 
-JOIN robots ON robots.id_robot = action.id_robot
-JOIN temps_intervention ti ON robots.id_robot = ti.id_robot
-JOIN lois_priorisees l ON l.id_scenario = ti.id_scenario
-WHERE resultat LIKE 'réussi';
-
-
 -- ETAPE 1 guidées
 
 --1 DEFINIR des indicateur de performance: 
@@ -75,6 +51,36 @@ WHERE
     
     -- VUE vue_robots_defaillants
 
+CREATE OR REPLACE VIEW vue_robotos_defaillants AS
+SELECT *
+FROM vue_indicateurs_performance
+WHERE 
+    nb_actions_reussies >= 1
+    AND taux_reussite <= 70
+    OR (
+        nb_actions_priorite_loi_1 = 0
+        AND nb_actions_priorite_loi_2 = 0
+        AND nb_actions_priorite_loi_3 > 0
+    );
+
+    --Gestion d'accès pour les analystes
+
+CREATE USER 'analystes'@'localhost' IDENTIFIED BY 'Robots'
+GRANT SELECT ON vue_robotos_performants TO 'analystes'@'localhost';
+GRANT SELECT ON vue_robotos_defaillants TO 'analystes'@'localhost';
+
+    --Gestion d'accès pour les superviseurs éthiques
+
+CREATE USER 'superviseurs_ethiques'@'localhost' IDENTIFIED BY 'Robots'
+GRANT SELECT,INSERT ON vue_robotos_performants TO 'superviseurs_ethiques'@'localhost';
+GRANT SELECT,INSERT ON vue_robotos_defaillants TO 'superviseurs_ethiques'@'localhost';
+
+    --Actualisation des privilèges
+FLUSH PRIVILEGES;
+
+    --Vérification des privilèges
+SHOW GRANTS FOR 'analystes'@'localhost';
+SHOW GRANTS FOR 'superviseurs_ethiques'@'localhost';
 
 --3 Etudier l'impact des actions sur les scénarios critiques
     -- VUE vue_impact_actions
