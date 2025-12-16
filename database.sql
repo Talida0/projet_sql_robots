@@ -70,14 +70,6 @@ CREATE TABLE performance_robots (
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot)
 );
 
-
-
-
-
-
-
-
-
 CREATE TABLE lois_priorisees (
     id_lois INT AUTO_INCREMENT PRIMARY KEY,
     id_scenario INT,
@@ -87,11 +79,6 @@ CREATE TABLE lois_priorisees (
     description TEXT,
     FOREIGN KEY (id_scenario) REFERENCES scenario(id_scenario)
 );
-
-
-
-
-
 
 CREATE TABLE evaluations_humaines (
     id_evaluation INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,7 +90,6 @@ CREATE TABLE evaluations_humaines (
     FOREIGN KEY (id_robot) REFERENCES robots(id_robot),
     FOREIGN KEY (id_humain) REFERENCES humain(id_humain)
 );
-
 
 CREATE TABLE violations_lois (
     id_violation INT AUTO_INCREMENT PRIMARY KEY,
