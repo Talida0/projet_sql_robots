@@ -124,3 +124,28 @@ WHERE a.resultat = 'échoué'
 GROUP BY s.priorite_loi, a.description_action
 ORDER BY nb_echecs DESC;
 
+      -- Transaction 
+
+START TRANSACTION;
+
+UPDATE lois_priorisees lp
+SET priorite_loi_2 = 'Non',
+    priorite_loi_3 = 'Oui'
+WHERE lp.id_scenario IN (
+    SELECT id_scenario
+    FROM vue_tendances_echec
+    WHERE taux_echec > 50
+);
+
+-- Vérifier les changements avant de commit
+SELECT * 
+FROM lois_priorisees
+WHERE id_scenario IN (
+    SELECT id_scenario
+    FROM vue_tendances_echec
+    WHERE taux_echec > 50
+);
+
+
+-- Valider la transaction
+COMMIT;
