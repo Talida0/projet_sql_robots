@@ -46,6 +46,7 @@ CREATE INDEX ti_id_scenario ON temps_intervention(id_scenario);
 CREATE INDEX lois_id_scenario ON lois_priorisees(id_scenario);
 
 --2 Identifier les robots performants ou défaillants
+
     -- VUE vue_robots_performants
 
 CREATE OR REPLACE VIEW vue_robotos_performants AS
@@ -123,6 +124,42 @@ JOIN scenario s ON a.id_scenario = s.id_scenario
 WHERE a.resultat = 'échoué'
 GROUP BY s.priorite_loi, a.description_action
 ORDER BY nb_echecs DESC;
+
+
+-- VUE vue_impact_actions - première version qui marche avec la transaction
+
+SELECT 
+    a.id_action,
+    r.id_robot,
+    r.nom_robot,
+    a.description_action,
+    s.id_scenario,
+    s.description AS scenario_description,
+    s.priorite_loi,
+    a.resultat,
+    a.impact,
+    a.duree_intervention,
+    t.nb_total_actions,
+    t.nb_echecs,
+    t.taux_echec, 
+    t.nb_reussis,
+    t.taux_reussis
+FROM action a
+JOIN robots r ON a.id_robot = r.id_robot
+JOIN scenario s ON a.id_scenario = s.id_scenario
+LEFT JOIN (
+    SELECT
+        description_action,
+        id_scenario,
+        COUNT(*) AS nb_total_actions,
+        SUM(CASE WHEN resultat = 'échoué' THEN 1 ELSE 0 END) AS nb_echecs,
+        ROUND(SUM(CASE WHEN resultat = 'échoué' THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS taux_echec,
+        SUM(CASE WHEN resultat = 'réussi' THEN 1 ELSE 0 END) AS nb_reussis,
+        ROUND(SUM(CASE WHEN resultat = 'réussi' THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS taux_reussis
+    FROM action
+    GROUP BY description_action, id_scenario
+) t ON a.description_action = t.description_action AND a.id_scenario = t.id_scenario
+ORDER BY r.nom_robot, t.taux_echec DESC;
 
       -- Transaction 
 
