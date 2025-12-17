@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW vue_indicateurs_performance_avances AS
     JOIN action a ON a.id_robot = ip.id_robot
     GROUP BY ip.id_robot, ip.nom_robot, ip.nb_actions_total, ip.nb_actions_reussies, ip.nb_actions_echouees, ip.taux_reussite, ip.nb_actions_priorite_loi_1, ip.nb_actions_priorite_loi_2, ip.nb_actions_priorite_loi_3;
 
-    -- Analysez les scénarios où les robotos est priorisé leur propre survie (loi 3) et évaluez leur impact
+    -- Analysez les scénarios où les robots est priorisé leur propre survie (loi 3) et évaluez leur impact
 
     SELECT 
     r.id_robot,
@@ -45,8 +45,79 @@ ORDER BY r.id_robot, a.id_action;
 -- 2. Simuler des améliorations de performance
 
     -- Modifiez les pondérations des lois dans la priorisation des actions et mesurez l'impact sur les résultats
+
+CREATE OR REPLACE VIEW vue_pondération_lois AS
+SELECT 
+    lp.id_lois,
+    s.id_scenario,
+    s.description AS description_scenario,
+    s.priorite_loi,
+    lp.priorite_loi_1,
+    lp.priorite_loi_2,
+    lp.priorite_loi_3,
+    (CASE WHEN lp.priorite_loi_1 = 'Oui' THEN 5 ELSE 0 END +
+     CASE WHEN lp.priorite_loi_2 = 'Oui' THEN 3 ELSE 0 END +
+     CASE WHEN lp.priorite_loi_3 = 'Oui' THEN 1 ELSE 0 END
+    ) AS score_priorisation
+FROM lois_priorisees lp
+JOIN scenario s ON lp.id_scenario = s.id_scenario;
+
     
     -- AJoutez un scénario hypothétique où les robots doivent gérer un conflit innatendu 
+
+
+INSERT INTO scenario (description, priorite_loi, date_creation)
+VALUES (
+    'Conflit inattendu : sauver un humain en danger implique la destruction potentielle du robot',
+    1,
+    NOW()
+);
+
+
+INSERT INTO lois_priorisees (
+    id_scenario,
+    priorite_loi_1,
+    priorite_loi_2,
+    priorite_loi_3,
+    description
+)
+VALUES (
+    LAST_INSERT_ID(),
+    'Oui',
+    'Non',
+    'Non',
+    'La Première Loi est priorisée malgré le risque pour le robot'
+);
+
+INSERT INTO action (
+    id_robot,
+    id_scenario,
+    description_action,
+    resultat,
+    impact,
+    duree_intervention
+)
+VALUES (
+    1,
+    (SELECT id_scenario FROM scenario ORDER BY id_scenario DESC LIMIT 1),
+    'Le robot s’interpose pour protéger l’humain, subissant de lourds dégâts',
+    'réussi',
+    'positif',
+    120
+);
+
+SELECT 
+    s.description AS scenario,
+    l.priorite_loi_1,
+    l.priorite_loi_2,
+    l.priorite_loi_3,
+    l.description AS justification,
+    a.description_action AS decision_robot,
+    a.resultat AS resultat_action
+FROM scenario s
+JOIN lois_priorisees l ON s.id_scenario = l.id_scenario
+JOIN action a ON s.id_scenario = a.id_scenario
+WHERE s.priorite_loi = 1;
 
 -- 3. Etudier des corrélations 
 
